@@ -103,10 +103,16 @@ class Graph:
         breath-first order.
         """
         # set q to an instance of queue()
+        q = Queue()
 
         # give q starting_vertex with enqueue method
+        q.enqueue(starting_vertex)
 
         # set path_to_vertex to empty list
+        path_to_vertex = []
+
+        # while loop through while true
+        # for loop through next_vertex in self.vertices
 
     def dfs(self, starting_vertex, destination_vertex):
         """
