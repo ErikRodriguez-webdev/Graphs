@@ -72,8 +72,7 @@ class Graph:
                 for next_vertex in self.get_neighbors(a_vertex):
                     s.push(next_vertex)
 
-    def dft_recursive(self, starting_vertex):
-        pass
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -81,20 +80,31 @@ class Graph:
         This should be done using recursion.
         """
         # stack and visited as cache in argument ?
-        # s = Stack()
-        # s.push(starting_vertex)
+        # start stack
+        s = Stack()
+        # push starting node into stack
+        s.push(starting_vertex)
 
-        # visited = set()
+        # only start visited if it is not classified
+        if visited is None:
+            visited = set()
 
-        # if s.size > 0:
-        #     a_vertex = s.pop()
+        # if the stack is greater than zero continue processing the stack
+        if s.size() > 0:
+            # takes from back of stack list
+            a_vertex = s.pop()
 
-        #     if a_vertex not in visited:
-        #         visited.add(a_vertex)
-        #         print(a_vertex)
+            # if we have not seen the node then post it into the visited
+            if a_vertex not in visited:
+                visited.add(a_vertex)
+                print(a_vertex)
 
-        #         for next_vertex in self.get_neighbors(a_vertex):
-        #             s.push(next_vertex)
+                # get all the values the node holds connections to
+                for next_vertex in self.get_neighbors(a_vertex):
+                    # push those connections into the back of the stack list
+                    s.push(next_vertex)
+
+                self.dft_recursive(s.pop(), visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -122,7 +132,7 @@ class Graph:
         """
         pass  # TODO
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -130,7 +140,30 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        q = Queue()
+        # push starting node into stack
+        q.enqueue(starting_vertex)
+
+        # only start visited if it is not classified
+        if visited is None:
+            visited = set()
+
+        # if the stack is greater than zero continue processing the stack
+        if q.size() > 0:
+            # takes from back of stack list
+            a_vertex = q.dequeue()
+
+            # if we have not seen the node then post it into the visited
+            if a_vertex not in visited:
+                visited.add(a_vertex)
+                print(a_vertex)
+
+                # get all the values the node holds connections to
+                for next_vertex in self.get_neighbors(a_vertex):
+                    # push those connections into the back of the stack list
+                    q.enqueue(next_vertex)
+
+                self.dfs_recursive(q.dequeue(), destination_vertex, visited)
 
 
 if __name__ == '__main__':
