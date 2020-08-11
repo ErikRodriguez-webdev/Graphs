@@ -149,11 +149,11 @@ class Graph:
         visited = set()
 
         while s.size() > 0:
-            print(f'This the normal stack: {s.stack}')
+            # print(f'This the normal stack: {s.stack}')
             path = s.pop()
-            print(f'this is the path aka the top of the stack: {path}')
+            # print(f'this is the path aka the top of the stack: {path}')
             v = path[-1]
-            print(f'vertex / node: {v}')
+            # print(f'vertex / node: {v}')
 
             if v not in visited:
                 if v == destination_vertex:
@@ -176,30 +176,30 @@ class Graph:
 
         This should be done using recursion.
         """
-        q = Queue()
-        # push starting node into stack
-        q.enqueue(starting_vertex)
+        s = Stack()
+        s.push([starting_vertex])
 
-        # only start visited if it is not classified
         if visited is None:
             visited = set()
 
-        # if the stack is greater than zero continue processing the stack
-        if q.size() > 0:
-            # takes from back of stack list
-            a_vertex = q.dequeue()
+        if s.size() > 0:
+            path = s.pop()
+            v = path[-1]
 
-            # if we have not seen the node then post it into the visited
-            if a_vertex not in visited:
-                visited.add(a_vertex)
-                print(a_vertex)
+            if v not in visited:
+                if v == destination_vertex:
+                    return path
 
-                # get all the values the node holds connections to
-                for next_vertex in self.get_neighbors(a_vertex):
-                    # push those connections into the back of the stack list
-                    q.enqueue(next_vertex)
+                visited.add(v)
 
-                self.dfs_recursive(q.dequeue(), destination_vertex, visited)
+                for next_v in self.get_neighbors(v):
+                    path_copy = list(path)
+                    path_copy.append(next_v)
+                    s.push(path_copy)
+
+                self.dfs_recursive(s.pop(), destination_vertex, visited)
+
+        return None
 
 
 if __name__ == '__main__':
