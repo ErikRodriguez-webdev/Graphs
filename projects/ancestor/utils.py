@@ -35,4 +35,4 @@ class Graph:
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)
         else:
-            print("Vertex does not exist")
+            raise IndexError("You can't do that, bud.")
