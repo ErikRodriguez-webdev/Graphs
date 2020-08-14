@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from traversal import Graph
 
 import random
 from ast import literal_eval
@@ -13,11 +14,11 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-# map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+map_file = "maps/test_loop_fork.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
-room_graph=literal_eval(open(map_file, "r").read())
+room_graph = literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
 
 # Print an ASCII map
@@ -26,9 +27,22 @@ world.print_rooms()
 player = Player(world.starting_room)
 
 # Fill this out with directions to walk
-# traversal_path = ['n', 'n']
 traversal_path = []
 
+# Add traversals here and add directions to traversal_path
+g = Graph()
+
+for room_id in room_graph:
+    # add all room vertices
+    g.add_vertex(room_id)
+    print(room_id, g.vertices[room_id])
+
+    # add connections between room vertices
+    room_connections = room_graph[room_id][-1].values()
+    room_set = set(room_connections)
+    g.add_edge(room_id, room_set)
+
+g.dft(player.current_room.id)
 
 
 # TRAVERSAL TEST
@@ -41,11 +55,11 @@ for move in traversal_path:
     visited_rooms.add(player.current_room)
 
 if len(visited_rooms) == len(room_graph):
-    print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
+    print(
+        f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
-
 
 
 #######
