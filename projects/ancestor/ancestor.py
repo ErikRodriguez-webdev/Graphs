@@ -19,11 +19,9 @@ def earliest_ancestor(ancestors, starting_node):
     s = Stack()
     s.push([starting_node])
 
-    print(f'stack list {s.stack}')
-
-    # set ancestor to -1 for test when starting node has no ancestor
+    # set ancestor to -1 for test when assuming starting node has no ancestor
     ancestor = -1
-    # set path_length to 0
+    # set path_length to starting node 1
     path_max_length = 1
 
     # while loop through size of stack > 0
@@ -37,6 +35,7 @@ def earliest_ancestor(ancestors, starting_node):
             ancestor = vertex
             path_max_length = len(path)
 
+        # no get neighbor method in graph class instead doing a lookup of vert in graph dictionary
         for next_vertex in graph.vertices[vertex]:
             path_copy = list(path)
             path_copy.append(next_vertex)
