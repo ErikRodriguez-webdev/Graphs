@@ -1,3 +1,7 @@
+from random import shuffle
+from itertools import combinations
+
+
 class Queue():
     def __init__(self):
         self.queue = []
@@ -61,10 +65,21 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
+        all_users = []
 
         # Add users
+        for username in range(1, num_users + 1):
+            self.add_user(username)
+
+            all_users.append(username)
 
         # Create friendships
+        random_friendship = list(combinations(all_users, 2))
+        shuffle(random_friendship)
+
+        for i in range(num_users * avg_friendships // 2):
+            self.add_friendship(
+                random_friendship[i][0], random_friendship[i][1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -86,9 +101,14 @@ class SocialGraph:
             vertex = path[-1]
 
             if vertex not in visited:
-                pass
                 # visited[vertex] = names?
+                visited[vertex] = path
+
                 # add to visited and collect friends
+                for friends in self.friendships[vertex]:
+                    path_copy = list(path)
+                    path_copy.append(friends)
+                    q.enqueue(path_copy)
 
         return visited
 
