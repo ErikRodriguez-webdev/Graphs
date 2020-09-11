@@ -13,8 +13,8 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
+map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
@@ -29,20 +29,14 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 traversal_path = []
 
+# YOUR CODE HERE
 # Add traversals here and add directions to traversal_path
 g = Graph()
 
-for room_id in room_graph:
-    # add all room vertices
-    g.add_vertex(room_id)
-    print(room_id, g.vertices[room_id])
+catch_directions = g.dfs(player.current_room.id, player)
 
-    # add connections between room vertices
-    room_connections = room_graph[room_id][-1].values()
-    room_set = set(room_connections)
-    g.add_edge(room_id, room_set)
-
-g.dft(player.current_room.id)
+# pass in directions to traversal path
+# traversal_path.extend(catch_directions)
 
 
 # TRAVERSAL TEST
@@ -52,7 +46,7 @@ visited_rooms.add(player.current_room)
 
 for move in traversal_path:
     player.travel(move)
-    visited_rooms.add(player.current_room)
+    visited_rooms.add(player.current_room, player)
 
 if len(visited_rooms) == len(room_graph):
     print(
@@ -65,12 +59,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")

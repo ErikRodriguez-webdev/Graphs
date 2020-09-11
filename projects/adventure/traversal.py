@@ -19,40 +19,77 @@ class Graph:
     def __init__(self):
         self.vertices = {}
 
-    def add_vertex(self, vertex_id):
-        if vertex_id not in self.vertices:
-            self.vertices[vertex_id] = set()
+    def inverse(self, direction_to_flip):
+        cardinal_inverse = {
+            'n': 's',
+            'e': 'w',
+            's': 'n',
+            'w': 'e'
+        }
 
-    def add_edge(self, v1, v2):
-        if v1 in self.vertices and v2 in self.vertices:
-            self.vertices[v1].add(v2)
-        else:
-            raise IndexError("You can't do that, bud.")
+        return cardinal_inverse[direction_to_flip]
 
-    def get_neighbors(self, vertex_id):
+    def dfs(self, starting_vertex, player):
         """
-        Get all neighbors (edges) of a vertex.
-        """
-        return self.vertices[vertex_id]
-
-    def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
+        Return a list containing a path from beginning to end in
+        depth-first order.
         """
         s = Stack()
         s.push([starting_vertex])
 
         visited = set()
+        directions = []
 
         while s.size() > 0:
+            print(player.current_room.id, directions, self.vertices)
+            # path is route through all rooms
             path = s.pop()
-            a_vertex = path[-1]
+            # room is a vertex
+            v = path[-1]
 
-            if a_vertex not in visited:
-                visited.add(a_vertex)
+            if v not in visited:
+                # create a vertices slot for room
+                self.vertices[v] = dict()
+                # find all exits for room
+                room_exits = player.current_room.get_exits()
 
-                print(a_vertex)
+                # for loop through list and store with unexplored question mark
+                for room_directions in room_exits:
+                    self.vertices[v][room_directions] = '?'
 
-                for next_vertex in self.get_neighbors(a_vertex):
-                    s.push(next_vertex)
+                # add direction from previous room after first room
+                if len(self.vertices) > 1:
+                    self.vertices[v][self.inverse(directions[-1])] = path[-2]
+
+                # finished processing add room to visited set
+                visited.add(v)
+
+            # end case for 500 main maze
+            if len(self.vertices) == 500:
+                # entered last room
+                return print(f"traversed: {directions}\nvertices: {self.vertices}")
+
+            # insert next room to go to with direction
+            for direction, value in self.vertices[v].items():
+                if value == '?':
+                    # then travel there to direction but add all to stack
+                    directions.append(direction)
+                    break
+
+            # move player forward
+            player.travel(directions[-1])
+
+            # update new num room and last room record
+            for direction, value in self.vertices[v].items():
+                # find direction traveled and edit only if value is '?'
+                if direction == directions[-1] and value == '?':
+                    # then edit record with room ventured to
+                    self.vertices[v][direction] = player.current_room.id
+                    break
+
+            # add new current room to stack with copy of current path
+            path_copy = list(path)
+            path_copy.append(player.current_room.id)
+            s.push(path_copy)
+
+        return directions
