@@ -1,6 +1,7 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
 class Room:
+    # room class holds id, name, description
     def __init__(self, name, description, id=0, x=None, y=None):
         self.id = id
         self.name = name
@@ -11,10 +12,16 @@ class Room:
         self.w_to = None
         self.x = x
         self.y = y
+
+    # room str method prints string replacing object when printing
     def __str__(self):
         return f"\n-------------------\n\n{self.name}\n\n   {self.description}\n\n{self.get_exits_string()}\n"
+
+    # room method prints room description
     def print_room_description(self, player):
         print(str(self))
+
+    # room get exits method gives you a list of exits to continue
     def get_exits(self):
         exits = []
         if self.n_to is not None:
@@ -26,8 +33,12 @@ class Room:
         if self.e_to is not None:
             exits.append("e")
         return exits
+
+    # room method returns exits in a string to terminal
     def get_exits_string(self):
         return f"Exits: [{', '.join(self.get_exits())}]"
+
+    # room method connections between rooms with direction
     def connect_rooms(self, direction, connecting_room):
         if direction == "n":
             self.n_to = connecting_room
@@ -44,6 +55,8 @@ class Room:
         else:
             print("INVALID ROOM CONNECTION")
             return None
+
+    # room method returns room in any direction
     def get_room_in_direction(self, direction):
         if direction == "n":
             return self.n_to
@@ -55,5 +68,7 @@ class Room:
             return self.w_to
         else:
             return None
+
+    # room method gives coordinates
     def get_coords(self):
         return [self.x, self.y]
